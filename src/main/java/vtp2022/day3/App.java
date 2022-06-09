@@ -19,5 +19,8 @@ public class App
     }
          
         System.out.println(defaultDb);
+        Repository repo = new Repository(defaultDb);
+        Session session = new Session(repo);
+        session.start();
     }
 }

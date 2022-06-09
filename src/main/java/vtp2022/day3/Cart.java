@@ -31,7 +31,7 @@ public class Cart {
     //if index is within the list, able to delete, if not do nothing
     public String delete (int index){
         if (index < contents.size())
-            return contents.remove(index);
+            return contents.remove(index-1);
         return "nothing";
     }
 

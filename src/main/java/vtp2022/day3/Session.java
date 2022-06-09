@@ -15,7 +15,7 @@ public class Session {
     public static final String LOGIN ="login";
 
     private Repository repository;
-    private Cart currenCart;
+    private Cart currentCart;
     
     public Session(Repository repo){
         this.repository =repo;
@@ -23,7 +23,8 @@ public class Session {
     public void start(){
         Console cons = System.console();
         Boolean stop = false;
-        currenCart = new Cart("anon");
+        currentCart = new Cart("anon");
+        System.out.println("Welcome to the shopping cart!");
 
         while (!stop) {
             String input = cons.readLine("> ");
@@ -31,38 +32,47 @@ public class Session {
             switch (terms[0]) {
                 case CARTS:
                     System.out.println("List of shopping carts");
-                    printList(currenCart.getContents());
+                    printList(currentCart.getContents());
                     break;
                 
                 case LIST:
-                    System.out.println("Items in " + currenCart.getUsername() + "'s shopping cart");
-                    //TODO
+                    System.out.println("Items in " + currentCart.getUsername() + "'s shopping cart");
+                    printList(currentCart.getContents());
                     break;
                 
                 case ADD:
-                    int before = currenCart.getContents().size();
+                    int before = currentCart.getContents().size();
                     for (int i = 1; i < terms.length; i++) 
-                        currenCart.add(terms[i]);
-                    int addedCount = currenCart.getContents().size() -before;
-                    System.out.println("Added " + addedCount + " to " + currenCart.getUsername()+"'s cart'");
+                        currentCart.add(terms[i]);
+                    int addedCount = currentCart.getContents().size() -before;
+                    System.out.println("Added " + addedCount + " to " + currentCart.getUsername()+"'s cart");
                     break;
                 
                 case DELETE:
                     int idx = Integer.parseInt(terms[1]);
-                    String item = currenCart.delete(idx);
-                    System.out.printf("Removed %s from %s's cart", item, currenCart.getUsername());
+                    String item = currentCart.delete(idx);
+                    System.out.printf("Removed %s from %s's cart", item, currentCart.getUsername());
                     break;
+
                 
                 case SAVE:
-                    //TOOO
+                    repository.save(currentCart);
+                    System.out.println("Done!");
                     break;
                 
                 case LOGIN:
-                    currenCart = new Cart(terms[1]);
-                    break;
+                    currentCart = new Cart(terms[1]);
+                    System.out.printf("%s login OK\n", terms[1]);
+                    
+                case LOAD:
+                currentCart = repository.load(currentCart.getUsername());
+                System.out.printf("Loaded %s shopping cart. There are %s item(s)\n", 
+                                    currentCart.getUsername(), currentCart.getContents().size());
+                break;
 
                 case USERS:
-                    //TOOO
+                    List<String> allCarts =repository.getShoppingCarts();
+                    this.printList(allCarts);
                     break;
 
                 case END:
@@ -70,7 +80,7 @@ public class Session {
                     break;                    
             
                 default:
-                System.err.printf("unknown inout : %s\n", terms[0]);
+                System.err.printf("unknown input : %s\n", terms[0]);
                     break;
             }
 
