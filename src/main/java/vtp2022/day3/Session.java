@@ -32,7 +32,7 @@ public class Session {
             switch (terms[0]) {
                 case CARTS:
                     System.out.println("List of shopping carts");
-                    printList(currentCart.getContents());
+                    printList(repository.getShoppingCarts());
                     break;
                 
                 case LIST:

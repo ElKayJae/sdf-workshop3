@@ -8,6 +8,7 @@ public class App
 {
     private static String defaultDb = "db";
 
+    // mvn compile exec:java -Dexec.mainClass="vtp2022.day3.App" -Dexec.args="cartdb"
     public static void main( String[] args )
     {
         if (args.length>0)

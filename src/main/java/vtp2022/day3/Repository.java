@@ -29,16 +29,21 @@ public class Repository {
     public void save(Cart cart){
         String cartName = cart.getUsername() + ".cart";
         String saveLocation = repository.getPath() + File.separator + cartName;
+        //create file object that can be used to create actual file later
         File saveFile = new File(saveLocation);
         OutputStream os =null;
         try {
             if(!saveFile.exists()){
+                System.out.println("save file does not exist, bew save file created!");
+                // need to create the folder before file can be created inside
                 Path path=Paths.get(repository.getPath());
                 Files.createDirectories(path);
+                //new actual file is created
                 saveFile.createNewFile();
             }
-            
+            // outputstream is set to new file
             os = new FileOutputStream(saveLocation);
+            // write content into the file
             cart.save(os);
             os.flush();
             os.close();
@@ -50,6 +55,7 @@ public class Repository {
     public Cart load(String username){
         String cartName = username + ".cart";
         Cart cart = new Cart(username);
+        if(repository.exists()){
         for(File cartFile: repository.listFiles())
             if(cartFile.getName().equals(cartName)){
                 try {
@@ -59,8 +65,8 @@ public class Repository {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
+        }
             return cart;
         }
  }
